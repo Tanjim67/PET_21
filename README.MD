@@ -3,7 +3,7 @@
 
 ## Model Inversion
 ---
-1. Clone the repo using one of these links: [HTTPS](https://github.com/kfaRabi/PET_21.git) or [SSH](git@github.com:kfaRabi/PET_21.git)
+1. Clone the repo using one of these links: [HTTPS](https://github.com/kfaRabi/PET_21.git) or [SSH](git@github.com:kfaRabi/PET_21.git) (`git@github.com:kfaRabi/PET_21.git`)
 2. Change the working directory to the `model_inversion` folder (`cd model_inversion`).
 3. Create a new python virtual environment using anaconda/miniconda (ex: `conda create --name pet_model_inversion python=3.8`)
 4. Activate the newly created env. (`conda activate pet_model_inversion`)
