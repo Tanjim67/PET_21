@@ -6,27 +6,28 @@ Options:
 --help                          # Print this message
 
 ========================= Membership Inference Attack =========================
--MIA                            # Execute the Membership Inference Attack.
--MIA-target="PATH_TO_MODEL"     # Specify the target model.
+-MIA                                # Execute the Membership Inference Attack.
+-MIA-target="PATH_TO_MODEL"         # Specify the target model.
 
 # Note inculde either 0 or all 4 options from below at once.
--MIA-train="PATH_TO_DATASET"    # Specify path to target training dataset.
--MIA-test="PATH_TO_DATASET"     # Specify path to target testing dataset.
--MIA-s-train="PATH_TO_DATASET"  # Specify path to shadow model training dataset.
--MIA-s-test="PATH_TO_DATASET"   # Specify path to shadow model testing dataset.
+-MIA-train="PATH_TO_DATASET"        # Specify path to target training dataset.
+-MIA-test="PATH_TO_DATASET"         # Specify path to target testing dataset.
+-MIA-s-train="PATH_TO_DATASET"      # Specify path to shadow model training dataset.
+-MIA-s-test="PATH_TO_DATASET"       # Specify path to shadow model testing dataset.
 
 Example: -MIA -MIA-target="target.pth" -MIA-train="" -MIA-test="" -MIA-s-train="" -MIA-s-test=""
+
 =============================== Model Inversion ===============================
--MINV                             # Execute the Model Inversion Attack.
--MINV-target="PATH_TO_MODEL"      # Specify the target model.
--MINV-train="PATH_TO_DATASET"     # Specify path to the training dataset.
--MINV-test="PATH_TO_DATASET"      # Specify path to the testing dataset.
+-MINV                               # Execute the Model Inversion Attack.
+-MINV-dataset="PATH_TO_DATASET"     # Specify path to the training and testing datasets.
+                                    # should contain 'testing' and 'training' folder with
+                                    # .pgm files in subfolders of those. (look into faces/)
 
 ============================= Attribute Inference =============================
--AI                             # Execute the Attribute Inference Attack.
--AI-target="PATH_TO_MODEL"      # Specify the target model.
--AI-train="PATH_TO_DATASET"     # Specify path to the training dataset.
--AI-test="PATH_TO_DATASET"      # Specify path to the testing dataset.
+-AI                                 # Execute the Attribute Inference Attack.
+-AI-target="PATH_TO_MODEL"          # Specify the target model.
+-AI-train="PATH_TO_DATASET"         # Specify path to the training dataset.
+-AI-test="PATH_TO_DATASET"          # Specify path to the testing dataset.
 
 
 for additional information refer to the readme or other help documents"""
@@ -64,6 +65,7 @@ for arg in sys.argv:
         AI_ARG.append(arg)
 
 if MIA:
+    # Parsing
     target_model = ""
     train_dataset = ""
     test_dataset = ""
@@ -80,6 +82,8 @@ if MIA:
             s_train_dataset = parse_EQ(arg)
         elif starts_with("-MIA-s-test=", arg):
             s_test_dataset = parse_EQ(arg)
+
+    # Executing
     # print(target_model, train_dataset, test_dataset, s_train_dataset, s_test_dataset)
     if train_dataset != "" or test_dataset != "" or s_train_dataset != "" or s_test_dataset != "":
         if train_dataset == "" or test_dataset == "" or s_train_dataset == "" or s_test_dataset == "":
@@ -91,6 +95,27 @@ if MIA:
             os.system(CMD)
 
 if MINV:
-    print(MINV_ARG)
+    # Parsing
+    dataset_path = ""
+    for arg in MINV_ARG:
+        if   starts_with("-MINV-dataset=", arg):
+            dataset_path = parse_EQ(arg)
+
+    # Executing
+    CMD = "python3 model_inversion/model_inversion.py {}".format(dataset_path)
+    print("Executing " + CMD)
+    os.system(CMD)
+
+
+
 if AI:
-    print(AI_ARG)
+    # Parsing
+    dataset_path = ""
+    for arg in AI_ARG:
+        if   starts_with("-MINV-dataset=", arg):
+            dataset_path = parse_EQ(arg)
+
+    # Executing
+    CMD = "python3 attribute_inference/script.py {}".format(dataset_path)
+    print("Executing " + CMD)
+    os.system(CMD)

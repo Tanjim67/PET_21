@@ -26,3 +26,16 @@ The last step will run the script. The script will first load all the face image
 
 
 The last step will run the script. The script will first load all the face images from the `UTKFace` folder and randomly split it into training and testing dataset (80% train, 10% test). It will use the training images to train a 2 layer CNN model to predict the race. At the end of the training, the training loss plot will be stored as an image file called `target_train_loss.png`. Then the model will be used to test the remaining images. After that, the script will trian the attack model using the same training dataset. We first feed the images to the target model and get the embedding from the last fully connected layer which is then used to train the attack model where our labels are now gender. At the end of the attack model training an image containing the graph of the attack model loss function will be stored as `attack_train_loss.png`. All the train and test accuracy will be printed on the terminal.
+
+
+## main.py Usage
+
+### membership_inference
+´´´sh
+python3 main.py -MIA -MIA-target="./target.pth" -MIA-train="PTH_TO_TARGET_TRAIN" -MIA-test="PTH_TO_TARGET_TEST" -MIA-s-train="PTH_TO_SHADOW_TRAIN" -MIA-s-test="PTH_TO_SHADOW_TEST"
+´´´
+
+### model_inversion
+´´´sh
+python3 main.py -MINV -MINV-dataset="model_inversion/faces/"
+´´´

@@ -13,6 +13,7 @@ import os
 import torchvision.transforms as transforms
 from random import sample
 from pathlib import Path
+import sys
 
 from tools import *
 
@@ -26,6 +27,8 @@ from tools import *
 cwd = os.getcwd()
 # print(f'Current Directory: {cwd}')
 data_file_location = os.path.join(cwd, 'faces/')
+if len(sys.argv) == 2:
+    data_file_location = os.path.join(cwd, sys.argv[1])
 os.chdir(data_file_location)
 
 
@@ -97,9 +100,9 @@ def train(model, train_loader, patience = 5, model_path = "model.pt", batch_size
         losses.append(epoc_loss / batch_processed)
         if print_loss:
             print("\nAvg. loss at epoch " + str(iter + 1) + ": " + str(epoc_loss / batch_processed))
-        
+
     stop = timeit.default_timer()
-    
+
     print("Training finished.\nTraining Took " + str(round((stop - start) / 60, 2)) + " Minutes\n\n")
 
     return losses
@@ -140,14 +143,14 @@ def attack_criterion(x, target_model, label_index):
 
 def MI_FACE(target_model, label_index, img_size, lr, alpha, process):
     torch.manual_seed(label_index)
-    
+
     x = torch.zeros(img_size)
     x.requires_grad = True
     target_model.eval()
 
     min_x = None
     min_loss = 1e9
-    
+
     for i in range(alpha):
 
         loss = attack_criterion(x, target_model, label_index)
@@ -161,7 +164,7 @@ def MI_FACE(target_model, label_index, img_size, lr, alpha, process):
         if min_loss > loss:
             min_loss = loss
             min_x = x.data
-    
+
     return min_x, min_loss
 
 
