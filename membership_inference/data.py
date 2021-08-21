@@ -161,3 +161,20 @@ def get_cifar10_loaders():
     testloader = DataLoader(testset, batch_size=batch_size,
                                              shuffle=False, num_workers=2)
     return (trainloader,testloader)
+
+def load_dataset(path):
+    transform = transforms.Compose(
+        [transforms.ToTensor(),
+         transforms.Normalize((0.5), (0.5)) # because the MNIST has only 1 channel, so we set (0.5), (0.5).
+         ])
+
+    raise Exception("MIA/data.py:171  I dont know how your data looks like so please implement the dataset parsing yourself :D")
+    # Please also adopt the transform to produce ONE channel, if u have multiple like in CIFAR please compress them to ONE channel.
+    dataset = None
+
+
+    batch_size = 32 # 16 32 64 is ok, just depend your computer
+    dataloader = DataLoader(dataset, batch_size=batch_size,
+                                              shuffle=True, num_workers=2)
+
+    return dataloader
