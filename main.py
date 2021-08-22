@@ -89,9 +89,13 @@ if MIA:
             print("ERROR, Please specify ALL 4 dataset parts for MIA. \n")
             print(HELP)
         else:
-            CMD = "python3 membership_inference/MIA.py {} {} {} {} {} ".format(train_dataset, test_dataset, s_train_dataset, s_test_dataset, target_model)
+            CMD = "cd membership_inference; python3 MIA.py {} {} {} {} {} ".format(train_dataset, test_dataset, s_train_dataset, s_test_dataset, target_model)
             print("Executing " + CMD)
             os.system(CMD)
+    if train_dataset == "" and test_dataset == "" and s_train_dataset == "" and s_test_dataset == "":
+        CMD = "cd membership_inference; python3 MIA.py {} ".format(target_model)
+        print("Executing " + CMD)
+        os.system(CMD)
 
 if MINV:
     # Parsing
@@ -121,7 +125,7 @@ if AI:
             attack_model_path= parse_EQ(arg)
 
     if not dataset_path:
-        print(f"Required arg -AI-dataset path not given")
+        print("Required arg -AI-dataset path not given")
     sys.path.append("attribute_inference")
     from attribute_inference.script import main
     # Executing
