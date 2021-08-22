@@ -52,9 +52,9 @@ if __name__ == '__main__':
 
         info("Evaulating")
         info("measuring accuracy on the Testing data of the target model")
-        attack_infer(test_data_loader, attack_path)
+        attack_infer(test_data, attack_path)
         info("measuring accuracy on the Training data of the target model")
-        attack_infer(train_data_loader, attack_path)
+        attack_infer(train_data, attack_path)
         exit(0)
 
     # execution if no arguments are given

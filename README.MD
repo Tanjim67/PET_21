@@ -50,15 +50,18 @@ This will run the attribute inference attack. The script will first load all the
 
 If retrained, the model(s) will be stored in a subfolder called `models`. If the target model path is specified the training steps will be skipped. If the attack model path is specified the attack model trainiing steps will be skipped.
 
+## Membership Inference
 
-## main.py Usage
+The following command will run the Membership Inference attack on the MNIST Dataset:
 
-### membership_inference
 ```sh
-python3 main.py -MIA -MIA-target="./target.pth" -MIA-train="PTH_TO_TARGET_TRAIN" -MIA-test="PTH_TO_TARGET_TEST" -MIA-s-train="PTH_TO_SHADOW_TRAIN" -MIA-s-test="PTH_TO_SHADOW_TEST"
+python main.py -MIA -MIA-target="membership_inference/models/target50.pth"
 ```
 
-### model_inversion
+The code will first load the MNIST dataset and split it into a training(80%) and testing(20%) dataset. These two dataset will then be used to train the shadow model while looking to not overfit it. Next we can interpret the training data as Members and testing data as Non-Members and input them both into the target and shadow model respectively. After deltaing the results we give the outputs labels based on whenever they were a member or not. This new dataset then will be used to train the actual attack model. At the end the accuracy will be calculated based on the test and train parts of the member/nonmember dataset respectively whereas the testing data should give more conclusive results.  
+
+This process can be configured to use specified datasets instead of the default MNIST one via the following command.  
 ```sh
-python3 main.py -MINV -MINV-dataset="model_inversion/faces/"
-```
+python3 main.py -MIA -MIA-target="membership_inference/models/target50.pth" -MIA-train="PTH_TO_TARGET_TRAIN" -MIA-test="PTH_TO_TARGET_TEST" -MIA-s-train="PTH_TO_SHADOW_TRAIN" -MIA-s-test="PTH_TO_SHADOW_TEST"
+```  
+For this to work all four dataset parameters have to be set, additionally for the custom datasets a deserialization method (see `membership_inference/data.py:173`) has to be provided in data.py allowing for maximum flexibility. Note that the `MIA-target` parameter is not mandatory and if not specified the target model will be trained on the specified train and test dataset for 50 epochs. This can be changed in line 19 in `membership_inference/models/target.py`. For different datasets one may also want to change the Neural Network as well, this can be done inside `membership_inference/nn.py`. The main execution flow can be found in `membership_inference/MIA.py`.  
