@@ -13,13 +13,13 @@
 ## Model Inversion
 Run the following command to run the model inversion attack:
 ```sh
-python3 main.py -MINV -MINV-target="model_inversion/models/mi_target_model.pt"
+python main.py -MINV -MINV-target="model_inversion/models/mi_target_model.pt"
 ```
 Here, `-MINV` arg tells the `main.py` file to run the model inversion attack. and the `-MINV-target` is an optional argument to specify the path of an already trained target model. If the target model is passed, then the attack will not train a new target model.
 
 Without specifying the `-MINV-target`, one can simply execute the following command:
 ```sh
-python3 main.py -MINV
+python main.py -MINV
 ```
 
 Since the AT&T face dataset has a specific structure, we have written a special file loader python class to evenly distribute each face class. Because of the special structure, we are not receiving any `datapath` arg for this attack.
@@ -31,7 +31,7 @@ The command will run the model inversion attack. The script will first load all 
 ---
 Run the following command to run the attribute inference attack:
 ```sh
-python3 main.py -AI -AI-dataset=UTKFacer -AI-target="attribute_inference/models/ai_target_model.pt" -AI-attack="attribute_inference/models/ai_attack_model.pt"
+python main.py -AI -AI-dataset=UTKFace -AI-target="attribute_inference/models/ai_target_model.pt" -AI-attack="attribute_inference/models/ai_attack_model.pt"
 ```
 
 Here, `-AI` arg tells the `main.py` file to run the attribute inference attack. The remaining args and their meaning are listed below:
@@ -43,7 +43,7 @@ Here, `-AI` arg tells the `main.py` file to run the attribute inference attack. 
 
 To train a target and attack model from the beginning the following command can be used:
 ```sh
-python3 main.py -AI -AI-dataset=UTKFacer
+python main.py -AI -AI-dataset=UTKFace
 ```
 
 This will run the attribute inference attack. The script will first load all the face images from the `UTKFace` folder and randomly split it into training and testing dataset (80% train, 20% test). It will use the training images to train a 2 layer CNN model to predict the race. At the end of the training, the training loss plot will be stored as an image file called `target_train_loss.png`. Then the model will be used to test the remaining images. After that, the script will trian the attack model using the same training dataset. We first feed the images to the target model and get the embedding from the last fully connected layer which is then used to train the attack model where our labels are now gender. At the end of the attack model training an image containing the graph of the attack model loss function will be stored as `attack_train_loss.png`. All the train and test accuracy will be printed on the terminal.
