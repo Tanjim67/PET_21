@@ -165,7 +165,7 @@ class Attack(torch.nn.Module):
         output = F.relu(output)
         output = self.fc4(output)
 
-        return F.sigmoid(output).squeeze(dim=1)
+        return torch.sigmoid(output).squeeze(dim=1)
         # return output
 
 
@@ -215,3 +215,9 @@ def plot_losses(losses, filename = 'loss.png'):
 
 def normalize_weight(face):
     return (face - torch.min(face)) / (torch.max(face) - torch.min(face))
+
+def save_model(model, filename):
+  torch.save(model.state_dict(), filename)
+
+def load_model(model, filename):
+  model.load_state_dict(torch.load(filename), strict=False)

@@ -25,9 +25,9 @@ Example: -MIA -MIA-target="target.pth" -MIA-train="" -MIA-test="" -MIA-s-train="
 
 ============================= Attribute Inference =============================
 -AI                                 # Execute the Attribute Inference Attack.
--AI-target="PATH_TO_MODEL"          # Specify the target model.
--AI-train="PATH_TO_DATASET"         # Specify path to the training dataset.
--AI-test="PATH_TO_DATASET"          # Specify path to the testing dataset.
+-AI-dataset="PATH_TO_DATASET"         # Specify path to the training and testing dataset.
+-AI-target="PATH_TO_TARGET_MODEL"     # Specify the target model. (optional)
+-AI-attack="PATH_TO_ATTACK_MODEL"     # Specify the attack model. (optional)
 
 
 for additional information refer to the readme or other help documents"""
@@ -111,11 +111,22 @@ if MINV:
 if AI:
     # Parsing
     dataset_path = ""
+    target_model_path = ""
+    attack_model_path = ""
     for arg in AI_ARG:
-        if   starts_with("-MINV-dataset=", arg):
+        if starts_with("-AI-dataset=", arg):
             dataset_path = parse_EQ(arg)
+        if starts_with("-AI-target=", arg):
+            target_model_path= parse_EQ(arg)
+        if starts_with("-AI-attack=", arg):
+            attack_model_path= parse_EQ(arg)
 
+    if not dataset_path:
+        print(f"Required arg -AI-dataset path not given")
+    sys.path.append("attribute_inference")
+    from attribute_inference.script import main
     # Executing
-    CMD = "python3 attribute_inference/script.py {}".format(dataset_path)
-    print("Executing " + CMD)
-    os.system(CMD)
+    main(dataset_path, target_model_path, attack_model_path)
+    # CMD = "python3 attribute_inference/script.py {}".format(dataset_path)
+    # print("Executing " + CMD)
+    # os.system(CMD)
