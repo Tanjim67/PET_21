@@ -19,15 +19,14 @@ Example: -MIA -MIA-target="target.pth" -MIA-train="" -MIA-test="" -MIA-s-train="
 
 =============================== Model Inversion ===============================
 -MINV                               # Execute the Model Inversion Attack.
--MINV-dataset="PATH_TO_DATASET"     # Specify path to the training and testing datasets.
-                                    # should contain 'testing' and 'training' folder with
-                                    # .pgm files in subfolders of those. (look into faces/)
+-MINV-target="PATH_TO_TARGET_MODEL" # Specify path to target model
+
 
 ============================= Attribute Inference =============================
 -AI                                 # Execute the Attribute Inference Attack.
--AI-dataset="PATH_TO_DATASET"         # Specify path to the training and testing dataset.
--AI-target="PATH_TO_TARGET_MODEL"     # Specify the target model. (optional)
--AI-attack="PATH_TO_ATTACK_MODEL"     # Specify the attack model. (optional)
+-AI-dataset="PATH_TO_DATASET"       # Specify path to the training and testing dataset.
+-AI-target="PATH_TO_TARGET_MODEL"   # Specify the target model. (optional)
+-AI-attack="PATH_TO_ATTACK_MODEL"   # Specify the attack model. (optional)
 
 
 for additional information refer to the readme or other help documents"""
@@ -96,15 +95,15 @@ if MIA:
 
 if MINV:
     # Parsing
-    dataset_path = ""
+    target_model_path = ""
     for arg in MINV_ARG:
-        if   starts_with("-MINV-dataset=", arg):
-            dataset_path = parse_EQ(arg)
+        if starts_with("-MINV-target=", arg):
+            target_model_path = parse_EQ(arg)
 
+    sys.path.append("model_inversion")
+    from model_inversion.script import main
     # Executing
-    CMD = "python3 model_inversion/model_inversion.py {}".format(dataset_path)
-    print("Executing " + CMD)
-    os.system(CMD)
+    main(target_model_path)
 
 
 

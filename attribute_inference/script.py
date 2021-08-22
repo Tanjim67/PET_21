@@ -198,7 +198,7 @@ def main(dataset_path, target_model_path, attack_model_path):
     else:
         attack_train_losses = attack_train(target, attack, train_loader, epochs=50)
         save_model(attack, 'attribute_inference/models/ai_attack_model.pt')
-        plot_losses(attack_train_losses, filename='attack_train_loss')
+        plot_losses(attack_train_losses, filename='attribute_inference/attack_train_loss')
 
 
     attack_test(target, attack, test_loader)

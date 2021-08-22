@@ -89,7 +89,7 @@ class Target(torch.nn.Module):
             self.fc2 = nn.Linear((h * w * self.conv_params[lc_ind][1]) // 2, num_of_classes)
         else:
             self.fc = nn.Linear(h * w * self.conv_params[lc_ind][1], num_of_classes)
- 
+
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, batch):
@@ -132,13 +132,13 @@ def conv_out_shape(conv_params, h, w):
         print(f"Output (h, w) after applying conv{ind + 1}: {(h, w)}")
     return (h, w)
 
-def plot_losses(losses):
+def plot_losses(losses, filename = 'loss.png'):
   plt = pyplot
   plt.plot(losses)
   plt.title('Epoch Vs Loss')
   plt.xlabel("Number Of Epochs")
   plt.ylabel("Training Loss")
-  plt.savefig('loss.png')
+  plt.savefig(filename)
 
 def normalize_weight(face):
     return (face - torch.min(face)) / (torch.max(face) - torch.min(face))
@@ -151,4 +151,10 @@ def plot_Inverted_face(face, meta, label, loss):
     face =  restore(face)
     pyplot.imshow(face)
     pyplot.title(f'Inverted Face for Label: {label} (loss: {loss:.5f})')
-    pyplot.savefig(f'inverted_face_label_{meta}')
+    pyplot.savefig(f'{meta}')
+
+def save_model(model, filename):
+  torch.save(model.state_dict(), filename)
+
+def load_model(model, filename):
+  model.load_state_dict(torch.load(filename), strict=False)
